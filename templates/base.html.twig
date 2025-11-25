@@ -2,7 +2,8 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Conférences Médicales{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
         {% endblock %}
@@ -12,50 +13,301 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <header class="navbar">
+            <div class="navbar-brand">
+                <a href="{{ path('app_accueil') }}">Conférences</a>
+            </div>
+            <nav class="navbar-menu">
+                <a href="{{ path('app_accueil') }}" class="nav-link">Accueil</a>
+                
+                {% if app.user %}
+                    <a href="{{ path('app_conference_index') }}" class="nav-link">Conférences</a>
+                    
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_conference_new') }}" class="nav-link-create">+ Créer conf</a>
+                        <a href="{{ path('app_pathologie_index') }}" class="nav-link">Pathologies</a>
+                        <a href="{{ path('app_user_index') }}" class="nav-link">Utilisateurs</a>
+                    {% endif %}
+                    
+                    <span class="nav-user">{{ app.user.email }}</span>
+                    <a href="{{ path('app_logout') }}" class="nav-link">Déconnexion</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="nav-link">Connexion</a>
+                {% endif %}
+            </nav>
+        </header>
+
+        <main class="main-content">
+            {% block body %}{% endblock %}
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 Gestion des Conférences</p>
+        </footer>
     </body>
 </html>
+
 <style>
-body {
-    font-family: Arial, sans-serif;
+* {
     margin: 0;
     padding: 0;
-    background: #f5f5f5;
+    box-sizing: border-box;
 }
 
-header {
-    background-color: #1f6feb;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* Navigation */
+.navbar {
+    background-color: #333;
     color: white;
     padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-nav a {
+.navbar-brand a {
     color: white;
-    margin-right: 15px;
     text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2em;
 }
 
-.container {
-    padding: 20px;
-}
-
-.cards {
+.navbar-menu {
     display: flex;
     gap: 15px;
+    align-items: center;
     flex-wrap: wrap;
 }
 
-.card {
-    background: white;
-    border-radius: 6px;
-    padding: 15px;
-    flex: 1 1 200px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+.nav-link {
+    color: white;
+    text-decoration: none;
 }
 
-.card a {
+.nav-link:hover {
+    text-decoration: underline;
+}
+
+.nav-link-create {
+    background-color: #27ae60;
+    padding: 8px 12px;
+    border-radius: 3px;
+    color: white;
     text-decoration: none;
-    color: #1f6feb;
+}
+
+.nav-link-create:hover {
+    background-color: #229954;
+}
+
+.nav-user {
+    color: #bbb;
+    font-size: 0.9em;
+}
+
+/* Main content */
+.main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: calc(100vh - 150px);
+}
+
+/* Footer */
+.footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 30px;
+    font-size: 0.9em;
+}
+
+/* Headings */
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+}
+
+h2 {
+    color: #333;
+    margin: 20px 0 10px 0;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9em;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}
+
+.btn-success {
+    background-color: #27ae60;
+}
+
+.btn-success:hover {
+    background-color: #229954;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.btn-secondary {
+    background-color: #95a5a6;
+}
+
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+}
+
+.btn-small {
+    padding: 5px 10px;
+    font-size: 0.85em;
+}
+
+.btn-edit {
+    background-color: #f39c12;
+}
+
+.btn-edit:hover {
+    background-color: #d68910;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    margin-top: 15px;
+}
+
+table thead {
+    background-color: #333;
+    color: white;
+}
+
+table th {
+    padding: 10px;
+    text-align: left;
+    font-weight: bold;
+}
+
+table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Forms */
+form {
+    background: white;
+    padding: 20px;
+    border-radius: 3px;
+    max-width: 600px;
+    margin: 15px auto;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="datetime-local"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 0.9em;
+    font-family: Arial, sans-serif;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    background-color: #f9f9f9;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Links */
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .navbar-menu {
+        width: 100%;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    table {
+        font-size: 0.85em;
+    }
+
+    table th, table td {
+        padding: 6px;
+    }
+
+    form {
+        padding: 15px;
+    }
 }
 </style>
 

@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ conference.titre }}{% endblock %}
+
+{% block body %}
+<h1>{{ conference.titre }}</h1>
+
+<div style="background: white; padding: 15px; border-radius: 3px; margin: 15px 0;">
+    <p><strong>Date :</strong> {{ conference.date ? conference.date|date('d/m/Y à H:i') : 'Non définie' }}</p>
+    <p><strong>Médecin :</strong> {{ conference.medecin.name }}</p>
+    <p><strong>Pathologie :</strong> {{ conference.pathologie.libelle }}</p>
+</div>
+
+<div style="display: flex; gap: 10px; flex-wrap: wrap;">
+    <a href="{{ path('app_conference_index') }}" class="btn btn-secondary">← Retour</a>
+    
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('app_conference_edit', {'id': conference.id}) }}" class="btn btn-edit">Éditer</a>
+        
+        <form method="post" action="{{ path('app_conference_delete', {'id': conference.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer ?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conference.id) }}">
+            <button type="submit" class="btn btn-danger">Supprimer</button>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}

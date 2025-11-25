@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+<h1>Connexion</h1>
+
+{% if error %}
+    <div style="background-color: #fee; color: #c33; padding: 10px; border-radius: 3px; margin-bottom: 15px;">
+        {{ error.messageKey|trans(error.messageData, 'security') }}
+    </div>
+{% endif %}
+
+<form method="post">
+    <div style="margin-bottom: 15px;">
+        <label for="username" style="display: block; margin-bottom: 5px; font-weight: bold;">Email</label>
+        <input type="email" id="username" name="_username" value="{{ last_username }}" required autofocus style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label for="password" style="display: block; margin-bottom: 5px; font-weight: bold;">Mot de passe</label>
+        <input type="password" id="password" name="_password" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+    <button type="submit" class="btn btn-success">Se connecter</button>
+</form>
+
+<hr style="margin: 20px 0;">
+
+<h2>Comptes de test</h2>
+<p><strong>Admin :</strong> admin@example.com / password</p>
+<p><strong>Médecin :</strong> medecin@example.com / password</p>
+{% endblock %}

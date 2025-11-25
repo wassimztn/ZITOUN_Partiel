@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ pathologie.libelle }}{% endblock %}
+
+{% block body %}
+<h1>{{ pathologie.libelle }}</h1>
+
+<div style="background: white; padding: 15px; border-radius: 3px; margin: 15px 0;">
+    <p><strong>Conférences associées :</strong> {{ pathologie.conferences|length }}</p>
+</div>
+
+<div style="display: flex; gap: 10px; flex-wrap: wrap;">
+    <a href="{{ path('app_pathologie_index') }}" class="btn btn-secondary">← Retour</a>
+    <a href="{{ path('app_pathologie_edit', {'id': pathologie.id}) }}" class="btn btn-edit">Éditer</a>
+    
+    <form method="post" action="{{ path('app_pathologie_delete', {'id': pathologie.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer ?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ pathologie.id) }}">
+        <button type="submit" class="btn btn-danger">Supprimer</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pathologies{% endblock %}
+
+{% block body %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+    <h1>Pathologies</h1>
+    <a href="{{ path('app_pathologie_new') }}" class="btn btn-success">+ Créer</a>
+</div>
+
+{% if pathologies|length > 0 %}
+    <table>
+        <thead>
+            <tr>
+                <th>Libellé</th>
+                <th>Conférences</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pathologie in pathologies %}
+            <tr>
+                <td>{{ pathologie.libelle }}</td>
+                <td>{{ pathologie.conferences|length }}</td>
+                <td>
+                    <a href="{{ path('app_pathologie_show', {'id': pathologie.id}) }}" class="btn btn-small">Voir</a>
+                    <a href="{{ path('app_pathologie_edit', {'id': pathologie.id}) }}" class="btn btn-small btn-edit">Éditer</a>
+                    <form method="post" action="{{ path('app_pathologie_delete', {'id': pathologie.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ pathologie.id) }}">
+                        <button type="submit" class="btn btn-small btn-danger">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Aucune pathologie trouvée.</p>
+{% endif %}
+{% endblock %}

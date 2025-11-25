@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conférences{% endblock %}
+
+{% block body %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+    <h1>Conférences</h1>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('app_conference_new') }}" class="btn btn-success">+ Créer</a>
+    {% endif %}
+</div>
+
+{% if conferences|length > 0 %}
+    <table>
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Date</th>
+                <th>Médecin</th>
+                <th>Pathologie</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for conference in conferences %}
+            <tr>
+                <td>{{ conference.titre }}</td>
+                <td>{{ conference.date ? conference.date|date('d/m/Y H:i') : '-' }}</td>
+                <td>{{ conference.medecin.name }}</td>
+                <td>{{ conference.pathologie.libelle }}</td>
+                <td>
+                    <a href="{{ path('app_conference_show', {'id': conference.id}) }}" class="btn btn-small">Voir</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_conference_edit', {'id': conference.id}) }}" class="btn btn-small btn-edit">Éditer</a>
+                        <form method="post" action="{{ path('app_conference_delete', {'id': conference.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ conference.id) }}">
+                            <button type="submit" class="btn btn-small btn-danger">Supprimer</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Aucune conférence trouvée.</p>
+{% endif %}
+{% endblock %}

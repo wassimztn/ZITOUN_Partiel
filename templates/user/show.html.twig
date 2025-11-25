@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ user.name }}{% endblock %}
+
+{% block body %}
+<h1>{{ user.name }}</h1>
+
+<div style="background: white; padding: 15px; border-radius: 3px; margin: 15px 0;">
+    <p><strong>Email :</strong> {{ user.email }}</p>
+    <p><strong>Rôle :</strong>
+        {% if 'ROLE_ADMIN' in user.roles %}
+            Admin
+        {% elif 'ROLE_MEDECIN' in user.roles %}
+            Médecin
+        {% else %}
+            User
+        {% endif %}
+    </p>
+    <p><strong>Conférences :</strong> {{ user.conferences|length }}</p>
+</div>
+
+<div style="display: flex; gap: 10px; flex-wrap: wrap;">
+    <a href="{{ path('app_user_index') }}" class="btn btn-secondary">← Retour</a>
+    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-edit">Éditer</a>
+    
+    <form method="post" action="{{ path('app_user_delete', {'id': user.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer ?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+        <button type="submit" class="btn btn-danger">Supprimer</button>
+    </form>
+</div>
+{% endblock %}
