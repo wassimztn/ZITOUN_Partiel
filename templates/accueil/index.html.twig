@@ -1,20 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AccueilController!{% endblock %}
+{% block title %}{{ page_title }}{% endblock %}
 
 {% block body %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+.container { max-width: 900px; margin: 2rem auto; font-family: Arial, sans-serif; }
+h1 { color: #2c3e50; }
+.cards { display: flex; gap: 1rem; margin-top: 2rem; }
+.card { flex: 1; padding: 1rem; border: 1px solid #ccc; border-radius: 8px; text-align: center; background: #f9f9f9; transition: transform 0.2s; }
+.card:hover { transform: scale(1.05); background: #e9ecef; }
+.card a { text-decoration: none; color: #007bff; font-weight: bold; }
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="container">
+    <h1>Bienvenue sur le site des Conférences Médicales</h1>
+    <p>Ce site permet aux médecins de partager leurs connaissances via des conférences.</p>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/home/wassim/Documents/Etudes/BTS_SIO2/Projet/TP_Partiel/src/Controller/AccueilController.php</code></li>
-        <li>Your template at <code>/home/wassim/Documents/Etudes/BTS_SIO2/Projet/TP_Partiel/templates/accueil/index.html.twig</code></li>
-    </ul>
+    <div class="cards">
+        <div class="card">
+            <h3><a href="{{ path('conference_index') }}">Voir toutes les conférences</a></h3>
+        </div>
+        <div class="card">
+            <h3><a href="{{ path('conference_new') }}">Créer une conférence (Admin)</a></h3>
+        </div>
+        <div class="card">
+            <h3><a href="{{ path('pathology_conferences', {id:1}) }}">Conférences sur l'Épilepsie</a></h3>
+        </div>
+    </div>
 </div>
 {% endblock %}
